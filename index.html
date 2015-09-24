@@ -1,0 +1,49 @@
+<!DOCTYPE HTML> 
+<html> 
+    <head>
+    <!Accessing Material Design Lite elements> 
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
+    <body>
+            <!Creating a drawer> 
+            <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+              <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                  <!-- Title -->
+                  <span class="mdl-layout-title">DO IT!</span>
+
+                </div>
+              </header>
+              <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Options</span>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="index.html">Home</a>
+                  <a class="mdl-navigation__link" href="record.html">Record</a>
+                  <a class="mdl-navigation__link" href="view.html">View</a>
+                </nav>
+              </div>
+              <main class="mdl-layout__content">
+                <br/> <br/>
+                <!-- Adding image -->
+                <div align = "Center"> 
+                <img src="fist_game_icon_by_inkedicon-d5bpq1z.png" alt="Fist Image" style="width:304px;height:290px;" >
+                <br/> <br/>
+                <font size = "5"> 
+                    "Don't let your dreams be dreams!" <br/> "Just do it!" <br/> <br/>
+                </font>
+
+                <button id = "record" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'record.html'">
+                     START RUN! 
+                </button> <br/> <br/>
+                <button id = "view" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'view.html'">
+                     RECORDS
+                </button>
+                </div>
+              </main>
+            </div>
+    </body>
+</html>
+                
+                

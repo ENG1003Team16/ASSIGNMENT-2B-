@@ -1,0 +1,53 @@
+<!DOCTYPE HTML> 
+<html> 
+    <head>
+    <!Accessing Material Design Lite elements> 
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
+    <body>
+            <!Creating a drawer> 
+            <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+              <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                  <!-- Title -->
+                  <span class="mdl-layout-title">DO IT!</span>
+
+                </div>
+              </header>
+              <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Options</span>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="index.html">Home</a>
+                  <a class="mdl-navigation__link" href="record.html">Record</a>
+                  <a class="mdl-navigation__link" href="view.html">View</a>
+                </nav>
+              </div>
+              <main class="mdl-layout__content">
+                <br/> <br/>
+                <div align = "Center"> 
+                <font size = "5"> 
+                    "KEEP MOVING FORWARD" <br/> <br/>
+                </font>
+		
+		<i class="material-icons">directions_walk size </i>  
+		<button id = "jog" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'jog.html'">
+                     JOG
+                </button> <br/> <br/>
+		
+		<i class="material-icons">directions_run size </i>  
+		<button id = "run" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'run.html'">
+                     RUN 
+                </button> <br/> <br/>
+
+		<i class="material-icons">directions_bike size </i>  
+		<button id = "cycle" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'cycle.html'">
+                     CYCLE  
+                </button> <br/> <br/>
+
+                </div>
+              </main>
+            </div>
+    </body>
+</html>
