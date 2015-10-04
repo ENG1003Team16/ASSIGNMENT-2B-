@@ -6,7 +6,25 @@
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
-    <body>
+    
+    <!Making the background fit to any window> 
+    <div class="maincontainer">
+    <div align="center" ><img src="trail-running-wallpaper-itpbngvvq.jpg" border="0" class="bg" ></div>
+    <style type="text/css">
+    .bg {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -5000;
+        height: 100%;
+    }
+    .maincontainer {
+        height: 1000px;
+        z-index: 5000;
+    }
+    </style>
+        <body>
             <!Creating a drawer for more options> 
             <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
               <header class="mdl-layout__header">
@@ -27,8 +45,8 @@
                 <br/> <br/>
                 <div align = "Center"> 
                 
-                <font size = 5> Please select an option: </font>
-                <br/> <br/>
+                <font size = 5 color = "white"> Please select an option: </font>
+                <br/> <br/> <br/>
                 <!Adding buttons for user interaction>
                 <button id = "start" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " getLocation()"> START RUN! </button> 
                 &nbsp;
@@ -54,7 +72,7 @@
                         x.innerHTML = "Geolocation is not supported by this browser.";
                     }
                     
-                    document.getElementById("details").innerHTML = "RUN DETAILS: <br/>"
+                    document.getElementById("details").innerHTML = "<span style='color:#ffffff'> RUN DETAILS: <br/> </span>";
                     
                     document.getElementById("viewButton").innerHTML 
                 }
@@ -68,7 +86,7 @@
                     mapholder.style.width = '500px';
 
                     var myOptions = {
-                    center:latlon,zoom:17,
+                    center:latlon,zoom:18,
                     mapTypeId:google.maps.MapTypeId.ROADMAP,
                     mapTypeControl:false,
                     navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
@@ -110,5 +128,6 @@
                 </div>
               </main>
             </div>
-    </body>
+        </body>
+        </div>
 </html>
