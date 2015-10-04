@@ -6,14 +6,31 @@
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
-    <body>
-            <!Creating a drawer> 
+    
+    <!Making the background fit to any window> 
+    <div class="maincontainer">
+    <div align="center" ><img src="trail-running-wallpaper-itpbngvvq.jpg" border="0" class="bg" ></div>
+    <style type="text/css">
+    .bg {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -5000;
+        height: 100%;
+    }
+    .maincontainer {
+        height: 1000px;
+        z-index: 5000;
+    }
+    </style>
+        <body>
+            <!Creating a drawer for more options> 
             <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
               <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
                   <!-- Title -->
                   <span class="mdl-layout-title">DO IT!</span>
-
                 </div>
               </header>
               <div class="mdl-layout__drawer">
@@ -27,13 +44,90 @@
               <main class="mdl-layout__content">
                 <br/> <br/>
                 <div align = "Center"> 
-                <font size = "5"> 
-                    "KEEP MOVING FORWARD" <br/> <br/>
-                </font>
-		
+                
+                <font size = 5 color = "white"> Please select an option: </font>
+                <br/> <br/> <br/>
+                <!Adding buttons for user interaction>
+                <button id = "start" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " getLocation()"> START RUN! </button> 
+                &nbsp;
+                <button id = "stop" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " "> STOP RUN. </button> 
+                &nbsp;    
+                <button id = "clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "clearScreen()"> CLEAR RUN. </button> 
+                <br/> <br/> 
+                    
+                <!Adding map for user to start recording the run when "START RUN!" button is pressed>     
+                <div id="mapholder"></div> <br/> 
+                <div id="details"></div>
+                <button id = "view" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'view.html'">
+                     VIEW RECORDS
+                </button>
+  
+                <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
+                <script>
+                function getLocation() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(showPosition, showError);
+                    } else { 
+                        x.innerHTML = "Geolocation is not supported by this browser.";
+                    }
+                    
+                    document.getElementById("details").innerHTML = "<span style='color:#ffffff'> RUN DETAILS: <br/> </span>";
+                    
+                    document.getElementById("viewButton").innerHTML 
+                }
+
+                function showPosition(position) {
+                    lat = position.coords.latitude;
+                    lon = position.coords.longitude;
+                    latlon = new google.maps.LatLng(lat, lon)
+                    mapholder = document.getElementById('mapholder')
+                    mapholder.style.height = '250px';
+                    mapholder.style.width = '500px';
+
+                    var myOptions = {
+                    center:latlon,zoom:18,
+                    mapTypeId:google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl:false,
+                    navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                    }
+
+                    var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+                    var marker = new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+                }
+
+                function showError(error) {
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            x.innerHTML = "User denied the request for Geolocation."
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            x.innerHTML = "Location information is unavailable."
+                            break;
+                        case error.TIMEOUT:
+                            x.innerHTML = "The request to get user location timed out."
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            x.innerHTML = "An unknown error occurred."
+                            break;
+                    }
+                }
+                
+                function clearScreen(){
+                    var decision = confirm("Are you sure you want to clear the run? \n Click OK to clear and CANCEL if not");
+                    if (decision === true){
+                        alert("Run cleared.");
+                        document.getElementById("mapholder").innerHTML = " ";
+                        document.getElementById("details").innerHTML = " ";
+                    } else {
+                        alert("Continue on...")
+                    }
+                }
+                
+                </script>
                 </div>
               </main>
             </div>
-    </body>
+        </body>
+        </div>
 </html>
