@@ -6,8 +6,26 @@
     <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
+    
+    <!Making the background fit to any window> 
+    <div class="maincontainer">
+    <div align="center" ><img src="mQqduCf.jpg" border="0" class="bg" ></div>
+    <style type="text/css">
+    .bg {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -5000;
+        height: 100%;
+    }
+    .maincontainer {
+        height: 1000px;
+        z-index: 5000;
+    }
+    </style>
     <body>
-            <!Creating a drawer> 
+            <!Creating a drawer for more options> 
             <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
               <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
@@ -27,7 +45,7 @@
               <main class="mdl-layout__content">
                 <br/> <br/> 
                 <div align = "Center"> 
-                <font size = "5"> 
+                <font size = "5" color = "white"> 
                     RECORDS <br/> <br/>
                 </font>
                 </div>
@@ -35,4 +53,5 @@
             </div>
 
     </body>
+    </div>
 </html>
