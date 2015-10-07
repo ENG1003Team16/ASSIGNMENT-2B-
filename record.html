@@ -90,6 +90,8 @@
                     //Displaying the initial position of the user: 
                     var x = document.getElementById("demo");
                     
+                    var myVar;
+                    
                     var myOptions = {
                         center:{lat: -34.397, lng: 150.644},
                         zoom:19,
@@ -174,6 +176,10 @@
                         startRun();
                     }
                     
+                    function myFunction() {
+                        myVar =   setInterval(startRun(), 500)  ;
+                    }
+                    
                     //Function for recording:
                     function startRun() {
                         
@@ -233,7 +239,7 @@
                         document.getElementById("details").innerHTML += "Latitude: " + latCurrent + "<br/>";
                         document.getElementById("details").innerHTML += "Longitude: " + lonCurrent + "<br/>";
                         document.getElementById("details").innerHTML += "Distance travelled: " + d + " m <br/>";
-                            }
+                    }
                                                                      
                     
                     //Function for plotting the route: 
@@ -274,6 +280,7 @@
                     //Function to stop run: 
                     function stopRun(){
                         runState = false; 
+                        clearTimeout(myVar);
                     }
                     
                     //Function to clear screen: 
