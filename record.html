@@ -1,236 +1,296 @@
-<!DOCTYPE html>
-<html>
-  <head>
+<!DOCTYPE HTML> 
+<html> 
+    <head>
+    <!Accessing Material Design Lite elements> 
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.blue_grey-indigo.min.css">
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Assignment 2B</title>
+    <meta name="description" content="ENG1003 Assignment 1 S2 2015">
+    <meta name="author" content="Moses Yi-Jie Wan">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    </head>
+    
+    <!Making the background fit to any window> 
+    <div align="center" ><img src="trail-running-wallpaper-itpbngvvq.jpg" border="0" class="bg" ></div>
     <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
-    </style>
-  </head>
-  <body>
-    
-      
-      
-      
-      
-    <script type="text/javascript">
-
-        
-        
-        
-   var map,pos,marker;
-        
-function initMap() {
-  
-      
-         map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 15
-  });
-        
-
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-       pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-        
-      
-        
-        
-        
-        
-        
-        
-        
-
-
-var  startmarker = new google.maps.Marker({
-    position: pos,
-    map: map,
-   icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 10
-    },
-  });   
-        
-  
-        
-        
-   
- startmarker.setAnimation(google.maps.Animation.DROP); 
-    
-
-       map.setCenter(pos);
-    
-       
-        
-        
-        
-      
-   flightPath = new google.maps.Polyline({
-   
-    geodesic: true,
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 2
-  });
-
-    
-   
+    .bg {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -5000;
+        height: 100%;
     }
-      
-                                         );
-  } 
-   
-}
 
-        
-        
-        
-        
-        
-   function myFunction() {
-    myVar =   setInterval(startrecord, 500)  ;
-}
+    </style>
+        <body>
+            <!Creating a drawer for more options> 
+            <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+              <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                  <!-- Title -->
+                  <span class="mdl-layout-title">DO IT!</span>
+                </div>
+              </header>
+              <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Options</span>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="index.html">Home</a>
+                  <a class="mdl-navigation__link" href="record.html">Record</a>
+                  <a class="mdl-navigation__link" href="view.html">View</a>
+                </nav>
+              </div>
+              <main class="mdl-layout__content">
+                <br/> <br/>
+                <div align = "Center"> 
+                <div id="mapholder"></div> <br/> 
+                <font size = 5 color = "white" face = "arial"> Please select an option: </font>
+                <br/> <br/> 
+                    
+                <!Adding buttons for user interaction>
+                <button id = "start" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " startRun()" style="font-family:Monospace; font-size: 18px"> START RUN! </button> 
+                &nbsp;
+                <button id = "stop" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "stopRun()" style="font-family:Monospace; font-size: 18px"> STOP RUN </button> 
+                &nbsp;    
+                <button id = "clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "clearScreen()" style="font-family:Monospace; font-size: 18px"> CLEAR RUN </button> 
+                &nbsp;  
+                <button id = "view" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'view.html'" style="font-family:Monospace; font-size: 18px">
+                     RECORDS
+                </button>
+                    
+                <div id="details"></div>
+                
+                <style>
+                  #map {
+                    width: 500px;
+                    height: 400px;
+                  }
+                    
+                  #details {
+                    font-family: arial "sans serif";
+                    font-size: 1em;
+                    color: rgb(255,255,255);
+                  }
+                </style>
+                    
+                <!Calling the Google maps API> 
+                <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+                    
+                <script>
+                    
+                    //Global variable for condition of button: 
+                    var latlonStart, runState, latStart, lonStart, latCurrent, lonCurrent, distCurrent, startMarker, map, pos;
+                    //Radius of Earth: 
+                    var R = 6371000; // metres
+                    
+                    //Displaying the initial position of the user: 
+                    var x = document.getElementById("demo");
+                    
+                    var myOptions = {
+                        center:{lat: -34.397, lng: 150.644},
+                        zoom:19,
+                        mapTypeId:google.maps.MapTypeId.ROADMAP,
+                        mapTypeControl:false,
+                        navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                        }
 
-        
-        
-   function myStopFunction() {
-    clearTimeout(myVar);
-}
-    
-    
-         
-        
-   
-function startrecord()  {
-    
-    
-  if (marker != null){  marker.setMap(null);}
-  
-      
-    
-    
-    
-    
+                    map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
 
-            if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-       pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-        
-        
-        
-        
-        
-                                             
-        
-    
-    marker = new google.maps.Marker({
-    position: pos,
-    map: map,
-   icon: {
-      path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-      scale: 10
-    },
-  });
-        
-       
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-  
-    
-      map.setCenter(pos)
-    
- 
- 
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(showPosition, showError);
+                    } else { 
+                        x.innerHTML = "Geolocation is not supported by this browser.";
+                    }
+                    
+                    //Function to show current position:
+                    function showPosition(position) {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(function(position) {
+                                pos = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+                                
+                                latStart = pos.lat;
+                                lonStart = pos.lng;
+                                
+                                startmarker = new google.maps.Marker({
+                                    position: pos,
+                                    map: map,
+                                    icon: {
+                                        path: google.maps.SymbolPath.CIRCLE,
+                                        scale: 10
+                                    },
+                                });   
+                                startmarker.setAnimation(google.maps.Animation.DROP); 
+                                map.setCenter(pos);
+                                
+                                flightPath = new google.maps.Polyline({
+                                    geodesic: true,
+                                    strokeColor: '#FF0000',
+                                    strokeOpacity: 1.0,
+                                    strokeWeight: 2
+                                });
+                            }
+                                                                    );
+                        } 
+                        
+                        latlonStart = new google.maps.LatLng(latStart, lonStart)
+                        mapholder = document.getElementById('mapholder')
+                        mapholder.style.height = '250px';
+                        mapholder.style.width = '500px';
+                        
+                        var infowindow = new google.maps.InfoWindow({
+                          content:"You are here!"
+                          });
 
-    if (flightPath.path == null){  flightPath.setMap(null);}
-    
-      path = flightPath.getPath();
-     path.push(map.center);
-    
-    
-    
-     flightPath.setMap(map);
-    
-    console.log(pos);
-   // console.log(map.center)
-    
-    
-        
-            
-}
-     
-                                             
-        
-                                             
-      
-                                         );
-  }       
-        
-        
-}
-        
+                        infowindow.open(map,startMarker);
+                    }
+                    
+                    //Function to display error:
+                    function showError(error) {
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                x.innerHTML = "User denied the request for Geolocation."
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                x.innerHTML = "Location information is unavailable."
+                                break;
+                            case error.TIMEOUT:
+                                x.innerHTML = "The request to get user location timed out."
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                x.innerHTML = "An unknown error occurred."
+                                break;
+                        }
+                    }
+                    
+                    //Loop for condition of recording: 
+                    while (runState === true){
+                        startRun();
+                    }
+                    
+                    //Function for recording:
+                    function startRun() {
+                        
+                        if (startMarker != null){  startMarker.setMap(null);}
+                        if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(function(position) {
+                                pos = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+                                
+                                latCurrent = pos.lat;
+                                lonCurrent = pos.lng;
+                                    
+                                startMarker = new google.maps.Marker({
+                                    position: pos,
+                                    map: map,
+                                    icon: {
+                                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                        scale: 10
+                                    },
+                                });
+                                startMarker.setAnimation(google.maps.Animation.BOUNCE);
+                                map.setCenter(pos)
+                                if (flightPath.path == null){  flightPath.setMap(null);}
+                                path = flightPath.getPath();
+                                path.push(map.center);
+                                flightPath.setMap(map);
+                                
+                                console.log(pos);
+                            }
+                                                                         
+                                                                         );
+                        }
+                        
+                        if (typeof(Number.prototype.toRadians) === "undefined") {
+                          Number.prototype.toRad = function() {
+                            return this * Math.PI / 180;
+                          }
+                        }
+                        runState = true
+                        plotRoute()
 
-    </script>
-    <script async defer
-  src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=&amp;callback=initMap">
-    </script>
-  </body>
+                        var theta1 = latStart * (Math.PI/180);
+                        var theta2 = latCurrent * (Math.PI/180);
+                        var diffLat = (latCurrent-latStart) * (Math.PI/180);
+                        var diffLong = (lonCurrent-lonStart) * (Math.PI/180);
+
+                        var a = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
+                                Math.cos(theta1) * Math.cos(theta2) *
+                                Math.sin(diffLong/2) * Math.sin(diffLong/2);
+                        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+                        var d = R * c;
+
+                        document.getElementById("details").innerHTML = "<br/>RUN DETAILS: <br/>";
+                        document.getElementById("details").innerHTML += "Latitude: " + latCurrent + "<br/>";
+                        document.getElementById("details").innerHTML += "Longitude: " + lonCurrent + "<br/>";
+                        document.getElementById("details").innerHTML += "Distance travelled: " + d + " m <br/>";
+                            }
+                                                                     
+                    
+                    //Function for plotting the route: 
+                    function plotRoute(){
+                        var x = document.getElementById("demo");
+                        
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(showPosition, showError);
+                        } else { 
+                            x.innerHTML = "Geolocation is not supported by this browser.";
+                        }
+
+                        function showPosition(position) {
+                            latCurrent = position.coords.latitude;
+                            lonCurrent = position.coords.longitude;
+                            latlonCurrent = new google.maps.LatLng(latCurrent, lonCurrent)
+                            mapholder = document.getElementById('mapholder')
+                            mapholder.style.height = '250px';
+                            mapholder.style.width = '500px';
+
+                            var myOptions = {
+                            center:latlonCurrent,zoom:19,
+                            mapTypeId:google.maps.MapTypeId.ROADMAP,
+                            mapTypeControl:false,
+                            navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+                            }
+
+                            var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+
+                            var marker = new google.maps.Marker({
+                                position: latlonCurrent,
+                                map: map,
+                                title: 'current location'
+                            });
+                        }
+                    }
+                    
+                    //Function to stop run: 
+                    function stopRun(){
+                        runState = false; 
+                    }
+                    
+                    //Function to clear screen: 
+                    function clearScreen(){
+                        var decision = confirm("Are you sure you want to clear the run? \n Click OK to clear and CANCEL if not");
+                        if (decision === true){
+                            alert("Run cleared.");
+                            window.location.reload()
+                        } else {
+                            alert("Continue on...")
+                        }
+                    }
+                
+                </script>
+                </div>
+              </main>
+            </div>
+        </body>
+
 </html>
-
-
-<!-- Square card -->
-<style>
-.demo-card-square.mdl-card {
-  width: 640px;
-  height: 640px;
-}
-.demo-card-square > .mdl-card__title {
-  color: #fff;
-  
-}
-</style>
-
-<div class="demo-card-square mdl-card mdl-shadow--2dp">
-  <div class="mdl-card__title mdl-card--expand">
-    <h2 class="mdl-card__title-text">map</h2>
-  </div>
-    <div id = 'map'</div>
-  
-  
-</div>
-
-
-
-<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"  onclick="myFunction()"> start recording! </a>
-
-
-<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"  onclick="myStopFunction()"> stop recording! </a>
-
-<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"  onclick="location.href='view.html';">View records! </a>
-
-
-
-
-
-
-<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.indigo-pink.min.css">
-<script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
- 
-
-
-
-
-
-        
-
-
-
-
-        
