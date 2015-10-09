@@ -52,13 +52,13 @@
                 <br/> <br/> 
                     
                 <!Adding buttons for user interaction>
-                <button id = "start" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " myFunction()" style="font-family:Monospace; font-size: 18px"> START RUN! </button> 
+                <button id = "start" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " myFunction()" style="font-family:Monospace; font-size: 10px"> START RUN! </button> 
                 &nbsp;
-                <button id = "stop" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "myStopFunction()" style="font-family:Monospace; font-size: 18px"> STOP RUN </button> 
+                <button id = "stop" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "myStopFunction()" style="font-family:Monospace; font-size: 10px"> STOP RUN </button> 
                 &nbsp;    
-                <button id = "clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "clearScreen()" style="font-family:Monospace; font-size: 18px"> CLEAR RUN </button> 
+                <button id = "clear" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = "clearScreen()" style="font-family:Monospace; font-size: 10px"> CLEAR RUN </button> 
                 &nbsp;  
-                <button id = "view" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'view.html'" style="font-family:Monospace; font-size: 18px">
+                <button id = "view" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onClick = " window.location.href = 'view.html'" style="font-family:Monospace; font-size: 10px">
                      RECORDS
                 </button>
                     
@@ -66,8 +66,8 @@
                 
                 <style>
                     #map {
-                        width: 500px;
-                        height: 400px;
+                        width: 320px;
+                        height: 250px;
                     }
                     
                     #details {
@@ -78,7 +78,6 @@
                 </style>
                     
                 <!Calling the Google maps API> 
-                <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
                 <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=&amp;callback=initMap"></script>
                 <script>
                     var map,pos,marker;
@@ -90,7 +89,7 @@
                     function initMap() {
                         map = new google.maps.Map(document.getElementById('map'), {
                             center: {lat: -34.397, lng: 150.644},
-                            zoom: 15
+                            zoom: 19
                         });
                         // Try HTML5 geolocation.
                         if (navigator.geolocation) {
@@ -102,6 +101,8 @@
                                 
                                 latStart = pos.lat;
                                 lonStart = pos.lng;
+                                latCurrent = latStart;
+                                lonCurrent = lonStart;
                                 
                                 var  startmarker = new google.maps.Marker({
                                     position: pos,
@@ -121,48 +122,61 @@
                                     strokeWeight: 2
                                 });
                             });
-                        } 
+                        }
                     }
                     
                     function myFunction() {
-                        myVar =   setInterval(startrecord, 500)  ;
+                        myVar = setInterval(startrecord, 1000)  ;
                     }
                     
                     function myStopFunction() {
                         clearTimeout(myVar);
                     }
+                    
                     function startrecord()  {
                         if (marker != null){  marker.setMap(null);}
+                        
+                        function showLocation(position){
+                            latCurrent = position.coords.latitude;
+                            lonCurrent = position.coords.longitude;
+                        }
+                        
+                        function errorHandler(err) {
+                            if(err.code == 1) {
+                                alert("Error: Access is denied!");
+                            }
+                            else if( err.code == 2) {
+                                alert("Error: Position is unavailable!");
+                            }
+                        }
+                        
                         if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(function(position) {
-                                pos = {
-                                    lat: position.coords.latitude,
-                                    lng: position.coords.longitude
-                                };
-                                
-                                latCurrent = pos.lat;
-                                lonCurrent = pos.lng;
-                                
-                                marker = new google.maps.Marker({
-                                    position: pos,
-                                    map: map,
-                                    icon: {
-                                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                                        scale: 10
-                                    },
-                                });
-                                
-                                marker.setAnimation(google.maps.Animation.BOUNCE);
-                                map.setCenter(pos)
-                                
-                                if (flightPath.path == null){  flightPath.setMap(null);}
-                                
-                                path = flightPath.getPath();
-                                path.push(map.center);
-                                flightPath.setMap(map);
-                                console.log(pos);
-                                //console.log(map.center)
+                            var options = {timeout:1000};
+                            navigator.geolocation.watchPosition(showLocation, errorHandler, options);
+                            
+                            pos = {
+                                lat: latCurrent,  
+                                lng: lonCurrent 
+                            };
+                            
+                            marker = new google.maps.Marker({   
+                                position: pos,    
+                                map: map,  
+                                icon: {      
+                                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,  
+                                    scale: 10  
+                                },  
                             });
+                                
+                            marker.setAnimation(google.maps.Animation.BOUNCE);   
+                            map.setCenter(pos)  
+                                
+                            if (flightPath.path == null){  flightPath.setMap(null);}  
+                            path = flightPath.getPath();    
+                            path.push(map.center);    
+                            flightPath.setMap(map);   
+                            console.log(pos);
+                                //console.log(map.center)
                         }
                         
                         var theta1 = latStart * (Math.PI/180);
